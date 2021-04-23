@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lz.demo.dao.StatisticMapper">
+    <select id="getAll" resultType="com.lz.demo.data.StatisticNumDo">
+        SELECT * from statistic_num;
+    </select>
+
+    <delete id="delete" >
+        delete from statistic_num where id = #{id};
+    </delete>
+
+    <insert id="add" parameterType="com.lz.demo.data.StatisticNumDo">
+        insert into statistic_num(num_arr_str) values (#{numArrStr});
+    </insert>
+</mapper>
