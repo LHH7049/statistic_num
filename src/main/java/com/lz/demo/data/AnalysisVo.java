@@ -1,12 +1,13 @@
 package com.lz.demo.data;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * @Author: lz
  * @Date: 2021/4/20 14:30
  */
-public class AnalysisVo {
+public class AnalysisVo implements Serializable{
     private List<KeyRank> threeRank;
     private List<KeyRank> fourRank;
     private List<KeyRank> fiveRank;

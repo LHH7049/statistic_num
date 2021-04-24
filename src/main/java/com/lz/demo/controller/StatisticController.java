@@ -5,6 +5,8 @@ import com.lz.demo.data.Result;
 import com.lz.demo.data.StatisticNumDo;
 import com.lz.demo.service.StatisticService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,6 +27,7 @@ public class StatisticController {
     private StatisticService service;
 
     @RequestMapping("/show.json")
+    @Cacheable(cacheNames = "statistic", key = "#keyStr")
     public Result<AnalysisVo> show(@RequestParam String keyStr){
         String[] split = keyStr.split(",");
         return service.show(buildKeyArr(split));
@@ -42,21 +45,25 @@ public class StatisticController {
     }
 
     @RequestMapping("/add.json")
+    @CacheEvict(cacheNames = "statistic", allEntries = true)
     public Result<Void> add(@RequestParam String param){
         return service.add(param);
     }
 
     @RequestMapping("/getAll.json")
+    @Cacheable(cacheNames = "statistic")
     public Result<List<StatisticNumDo>> getAll(){
         return service.getAll();
     }
 
     @RequestMapping("/delete.json")
+    @CacheEvict(cacheNames = "statistic", allEntries = true)
     public Result<Void> delete(@RequestParam int id){
         return service.delete(id);
     }
 
     @RequestMapping("/forceReload.json")
+    @CacheEvict(cacheNames = "statistic", allEntries = true)
     public Result<Void> forceReload(){
         return service.forceReload();
     }

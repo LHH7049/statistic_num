@@ -2,12 +2,14 @@ package com.lz.demo.data;
 
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
+
 /**
  * @Author: lz
  * @Date: 2021/4/22 13:48
  */
 @Component("statisticNumDo")
-public class StatisticNumDo {
+public class StatisticNumDo implements Serializable {
     private int id;
     private String numArrStr;
 
