@@ -37,7 +37,6 @@ public class StatisticAlgorithmService {
         }
 
         waitSubTaskFinish();
-        shutdownExecutor();
         return Result.successResult(null);
     }
 
@@ -47,12 +46,6 @@ public class StatisticAlgorithmService {
 
     private void waitSubTaskFinish() {
         while (count.get() > INITIAL_COUNT) {
-        }
-    }
-
-    private void shutdownExecutor() {
-        executor.shutdown();
-        while (!executor.isTerminated()) {
         }
     }
 

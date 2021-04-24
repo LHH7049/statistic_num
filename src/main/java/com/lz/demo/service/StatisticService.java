@@ -24,7 +24,8 @@ public class StatisticService {
     @Autowired
     private StatisticMapper statisticMapper;
 
-    private static int INIT_LENGTH = 81;
+    private static final int INIT_LENGTH = 81;
+    private static final int MAX_LENGTH = 100;
     private static Map<Integer, IRecordRankService> recordServiceMap = null;
 
     private void reload(){
@@ -87,16 +88,13 @@ public class StatisticService {
         return analysisVo;
     }
 
-    private static final int MAX_LENGTH = 100;
     private List<KeyRank> getKeyRank(Map<String, Integer> keyMap){
         if (keyMap == null){
             return new ArrayList<>();
         }
         List<KeyRank> keyRanks = new ArrayList<>();
         for (Map.Entry<String, Integer> entry : keyMap.entrySet()) {
-            if (entry.getValue() >= 2) {
-                keyRanks.add(new KeyRank(entry.getKey(), entry.getValue()));
-            }
+            keyRanks.add(new KeyRank(entry.getKey(), entry.getValue()));
         }
         keyRanks.sort((k1, k2) -> k2.getCount() - k1.getCount());
         return keyRanks.subList(0, Math.min(keyRanks.size(), MAX_LENGTH));
