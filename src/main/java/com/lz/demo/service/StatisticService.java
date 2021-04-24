@@ -25,7 +25,7 @@ public class StatisticService {
     private StatisticMapper statisticMapper;
 
     private static int INIT_LENGTH = 81;
-    private static Map<Integer, IRecordRankService> recordServiceMap = new HashMap<>();
+    private static Map<Integer, IRecordRankService> recordServiceMap = null;
 
     private void reload(){
         recordServiceMap = new HashMap<>();
