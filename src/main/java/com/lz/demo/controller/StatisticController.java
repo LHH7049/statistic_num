@@ -27,7 +27,6 @@ public class StatisticController {
     private StatisticService service;
 
     @RequestMapping("/show.json")
-    @Cacheable(cacheNames = "statistic", key = "#keyStr")
     public Result<AnalysisVo> show(@RequestParam String keyStr){
         String[] split = keyStr.split(",");
         return service.show(buildKeyArr(split));

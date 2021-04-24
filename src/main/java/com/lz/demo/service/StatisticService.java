@@ -27,7 +27,24 @@ public class StatisticService {
     private static int INIT_LENGTH = 81;
     private static Map<Integer, IRecordRankService> recordServiceMap = new HashMap<>();
 
+    private void reload(){
+        recordServiceMap = new HashMap<>();
+        for (Integer combinationNum : Constant.combinationNums) {
+            recordServiceMap.put(combinationNum, new RecordRankServiceImpl());
+        }
+    }
+
+    private void clear(){
+        recordServiceMap = null;
+    }
+
     public Result<AnalysisVo> show(List<Integer> keys){
+        if (recordServiceMap != null){
+            return ResultUtil.buildSuccessResult(buildAnalysisVo());
+        } else {
+            reload();
+        }
+
         List<int[]> data = readFromDB();
         Result<Void> result = runAlgorithm(data, keys);
         if (!result.isSuccess()) {
@@ -86,11 +103,13 @@ public class StatisticService {
     }
 
     public Result<Void> delete(int id){
+        clear();
         statisticMapper.delete(id);
         return ResultUtil.buildSuccessResult();
     }
 
     public Result<Void> add(String param){
+        clear();
         statisticMapper.add(new StatisticNumDo(-1, param));
         return ResultUtil.buildSuccessResult();
     }
@@ -101,6 +120,7 @@ public class StatisticService {
     }
 
     public Result<Void> forceReload(){
+        clear();
         return ResultUtil.buildSuccessResult();
     }
 
