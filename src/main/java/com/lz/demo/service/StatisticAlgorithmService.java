@@ -3,11 +3,9 @@ package com.lz.demo.service;
 
 import com.lz.demo.data.Constant;
 import com.lz.demo.data.Result;
-import org.springframework.stereotype.Component;
+import com.lz.demo.util.ThreadUtil;
 
-import javax.annotation.PreDestroy;
 import java.util.*;
-import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -16,21 +14,13 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class StatisticAlgorithmService {
 
-    private static final int CORE_POOL_SIZE = Runtime.getRuntime().availableProcessors();
     private static final int INITIAL_COUNT = 0;
     private static final AtomicInteger count = new AtomicInteger(INITIAL_COUNT);
-    private static final ThreadPoolExecutor executor = new ThreadPoolExecutor(CORE_POOL_SIZE, CORE_POOL_SIZE, 1000, TimeUnit.MILLISECONDS,
-            new LinkedBlockingQueue<>(), new ThreadPoolExecutor.CallerRunsPolicy());
 
     private Map<Integer, IRecordRankService> recordRankService;
 
     public StatisticAlgorithmService(Map<Integer, IRecordRankService> recordRankService) {
         this.recordRankService = recordRankService;
-    }
-
-    public void destroy(){
-        System.out.println("关闭线程");
-        shutdownExecutor();
     }
 
     public Result<Void> run(List<int[]> inputData, List<Integer> inputKeys) {
@@ -40,7 +30,7 @@ public class StatisticAlgorithmService {
 
         for (int[] inputDatum : inputData) {
             count.addAndGet(1);
-            executor.execute(new StatisticRunner(inputDatum, inputKeys, new ArrayList<>()));
+            ThreadUtil.INSTANCE.run(new StatisticRunner(inputDatum, inputKeys, new ArrayList<>()));
         }
 
         waitSubTaskFinish();
@@ -54,11 +44,6 @@ public class StatisticAlgorithmService {
     private void waitSubTaskFinish() {
         while (count.get() > INITIAL_COUNT) {
         }
-    }
-
-    private void shutdownExecutor(){
-        executor.shutdown();
-        while(!executor.isTerminated()){}
     }
 
     class StatisticRunner implements Runnable {
@@ -88,7 +73,7 @@ public class StatisticAlgorithmService {
                     List<Integer> newCombination = new ArrayList<>(combination);
                     newCombination.add(i);
                     count.addAndGet(1);
-                    executor.execute(new StatisticRunner(items, inputKeys, newCombination));
+                    ThreadUtil.INSTANCE.run(new StatisticRunner(items, inputKeys, newCombination));
 
                     IRecordRankService rankService = recordRankService.get(newCombination.size() + inputKeys.size());
                     if (rankService == null) {
