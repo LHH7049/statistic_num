@@ -1,6 +1,0 @@
-logging:
-  pattern:
-    console: "%d - %msg%n"
-  path: /home/logs/demo
-  level:
-    root: warn

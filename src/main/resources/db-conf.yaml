@@ -1,5 +1,0 @@
-db:
-  name: com.mysql.jdbc.Driver
-  url: jdbc:mysql://10.17.1.75:3306/testSpringBoot
-  username: oss
-  password: oss

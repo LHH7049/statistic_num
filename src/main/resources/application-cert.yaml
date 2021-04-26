@@ -1,0 +1,5 @@
+server:
+  ssl:
+    key-store: C:/cert/5547341_www.damaobaba.top.pfx
+    key-store-password: xE0uvON7
+    key-store-type: JKS
