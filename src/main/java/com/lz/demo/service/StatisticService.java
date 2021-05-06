@@ -40,11 +40,7 @@ public class StatisticService {
     }
 
     public Result<AnalysisVo> show(List<Integer> keys){
-        if (recordServiceMap != null){
-            return ResultUtil.buildSuccessResult(buildAnalysisVo());
-        } else {
-            reload();
-        }
+        reload();
 
         List<int[]> data = readFromDB();
         Result<Void> result = runAlgorithm(data, keys);
